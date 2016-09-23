@@ -1,6 +1,6 @@
 'use strict';
 var Orbat = class {
-	constructor() {
+	constructor(){
 		this.orbatName = '';
 		this.hostility = '';
 	}
@@ -50,7 +50,7 @@ var Orbat = class {
 		this.orbatName = xml.firstChild.getAttribute(version[xmlns].name);
 		this.hostility = xml.firstChild.getAttribute(version[xmlns].hostility);
 		for (var i in xml.firstChild.childNodes){
-			if(xml.firstChild.childNodes[i].nodeName == version[xmlns].organisation){
+			if (xml.firstChild.childNodes[i].nodeName == version[xmlns].organisation){
 				var element = xml.firstChild.childNodes[i];
 				this.name = element.getAttribute(version[xmlns].name);
 				this.sidc = element.getAttribute(version[xmlns].sidc);
@@ -63,11 +63,11 @@ var Orbat = class {
 		function toXML(obj){
 			var xml = '';
 			xml += '<Organisation Name="'+obj.name+'" SymbolCode="'+obj.sidc+'" SubSymbolCode="">\n';
-			xml += '<CustomAttributes />\n<NominalHoldings />\n'
+			xml += '<CustomAttributes />\n<NominalHoldings />\n';
 			//console.log(obj)
 			var suborgs = obj.suborgs || obj._suborgs;
-			if(suborgs){
-				if(suborgs.length){
+			if (suborgs){
+				if (suborgs.length){
 					xml += '<SubOrganisations>\n';
 					for (var i in suborgs){
 						xml += toXML(suborgs[i]);
@@ -79,11 +79,12 @@ var Orbat = class {
 			}else{
 				xml += '<SubOrganisations />\n';
 			}
-			xml += '</Organisation>\n'
+			xml += '</Organisation>\n';
 			return xml;
 		}
 		var xml = '';
-		xml += '<?xml version="1.0" encoding="utf-8"?>\n<Orbat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ModificationTime="'+(new Date().toISOString())+'" CreationTime="'+(new Date().toISOString())+'" Name="'+this.orbatName+'" Hostility="'+this.hostility+'" ParentRelationship="" xmlns="http://schemas.systematic.dk/2011/products/orbat-definition-v2">\n';
+		xml += '<?xml version="1.0" encoding="utf-8"?>\n';
+		xml += '<Orbat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ModificationTime="'+(new Date().toISOString())+'" CreationTime="'+(new Date().toISOString())+'" Name="'+this.orbatName+'" Hostility="'+this.hostility+'" ParentRelationship="" xmlns="http://schemas.systematic.dk/2011/products/orbat-definition-v2">\n';
 		xml += toXML(this);
 		xml += '<HoldingTypes />\n<CustomAttributes />\n</Orbat>';
 		return xml;
