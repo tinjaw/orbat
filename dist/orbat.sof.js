@@ -14,7 +14,7 @@ var Orbat = class {
 							var organisation = element.childNodes[i].childNodes[j];
 							var o = {};
 							o.name = organisation.getAttribute(version[xmlns].name);
-							o.SIDC = organisation.getAttribute(version[xmlns].sidc);
+							o.sidc = organisation.getAttribute(version[xmlns].sidc);
 							o.suborgs = suborgs(organisation);
 							subs.push(o);
 						}
