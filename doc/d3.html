@@ -26,15 +26,14 @@ body{
 }
 
 .indicator {
-  fill: rgb(150,150,150);
   stroke: rgb(100,100,100);
 }
 
 </style>
 
 <script src="../dist/orbat.sof.js"></script>
-<script src="../d3.v4.min.js"></script>
-<script src="../milsymbol.js"></script>
+<script src="../dependencies/d3.v4.min.js"></script>
+<script src="../dependencies/milsymbol.js"></script>
 
 <body onload="document.getElementById('files').addEventListener('change', loadFileAsText, false)">
 Sitaware Orbat file (SOF): <input type="file" id="files" name="files[]"><br>
@@ -104,7 +103,8 @@ function update(svg, d3cluster, d3hirarcy, source) {
 	
 	node.select(".indicator").transition()
 		.duration(duration)
-		.attr("transform", function(d) { if (d._children){ return "translate(-20,0) rotate(0)" }else{ return "translate(-20,0) rotate(90)" } })
+		.attr("fill", function(d) { if (d._children){ return "rgb(250,250,250)" }else{ return "rgb(100,100,100)" } })
+		.attr("transform", function(d) { if (d._children){ return "translate(-21,0) rotate(0)" }else{ return "translate(-21,0) rotate(45)" } })
 //Enter new nodes
 	var newNode = node.enter().append("g")
 		.attr("class", "node")
@@ -121,8 +121,9 @@ function update(svg, d3cluster, d3hirarcy, source) {
 			d3.select(this)
 			.append("path")
 			.attr("class","indicator")
-			.attr("d", "M -3.5,-5 l 7,5 -7,5 z")
-			.attr("transform", function(d) { if (d._children){ return "translate(-20,0) rotate(0)" }else{ return "translate(-20,0) rotate(90)" } })
+			.attr("d", "M -0,-5 l 5,5 -5,5 z")
+			.attr("fill", function(d) { if (d._children){ return "rgb(250,250,250)" }else{ return "rgb(100,100,100)" } })
+			.attr("transform", function(d) { if (d._children){ return "translate(-21,0) rotate(0)" }else{ return "translate(-21,0) rotate(45)" } })
 			.on("click", function click(d) {
 				if (d.children) {
 					d._children = d.children;
