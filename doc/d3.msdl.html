@@ -31,17 +31,17 @@ body{
 
 </style>
 
-<script src="../dist/orbat.sof.js"></script>
+<script src="../dist/orbat.msdl.js"></script>
 <script src="../dependencies/d3.v4.min.js"></script>
 <script src="../dependencies/milsymbol.js"></script>
 
 <body onload="document.getElementById('files').addEventListener('change', loadFileAsText, false)">
-Sitaware Orbat file (SOF): <input type="file" id="files" name="files[]"><br>
+Military Scenario Definition Language file (MSDL): <input type="file" id="files" name="files[]"><br>
 
 <div id="orbat"></div>
     
 <script>
-var margin = {top: 50, right: 50, bottom: 50, left: 50};
+var margin = {top: 10, right: 20, bottom: 10, left: 30};
 
 function loadFileAsText (evt) {
 	var fileToLoad = evt.target.files[0];
@@ -49,10 +49,6 @@ function loadFileAsText (evt) {
 	fileReader.onload = function(fileLoadedEvent) {
 		var file = fileLoadedEvent.target.result;
 		var orbat = new Orbat().read(file);
-		//document.getElementById('orbat_json').value = JSON.stringify(orbat, null, 4);
-		//document.getElementById('orbat_xml').value = orbat.write();
-		
-		
 		
 		var svg = d3.select("#orbat")
 			.append("svg")
@@ -74,7 +70,7 @@ function loadFileAsText (evt) {
 
 function update(svg, d3cluster, d3hirarcy, source) {
 	var barHeight = 25;
-	var duration = 700;
+	var duration = 600;
 	// Compute the new tree layout.
   	var nodes = d3cluster(d3hirarcy),
     	links = nodes.links();
@@ -117,13 +113,13 @@ function update(svg, d3cluster, d3hirarcy, source) {
       	.style("opacity", 1);
 	
 	newNode.each(function (d) {
-		if(d.children || d._children){
+		if (d.children || d._children) {
 			d3.select(this)
 			.append("path")
 			.attr("class","indicator")
 			.attr("d", "M -0,-5 l 5,5 -5,5 z")
-			.attr("fill", function(d) { if (d._children){ return "rgb(250,250,250)" }else{ return "rgb(100,100,100)" } })
-			.attr("transform", function(d) { if (d._children){ return "translate(-21,0) rotate(0)" }else{ return "translate(-21,0) rotate(45)" } })
+			.attr("fill", function(d) { if (d._children) { return "rgb(250,250,250)" }else{ return "rgb(100,100,100)" } })
+			.attr("transform", function(d) { if (d._children) { return "translate(-21,0) rotate(0)" }else{ return "translate(-21,0) rotate(45)" } })
 			.on("click", function click(d) {
 				if (d.children) {
 					d._children = d.children;
@@ -137,21 +133,26 @@ function update(svg, d3cluster, d3hirarcy, source) {
 		}
 	})
 	
-	//milsymbol icon	
-	newNode.append("g")
-	    .attr("class", "symbol")
-		.attr("transform", function(d) {
-			if (d.data.sidc) d.data.symbol = new MS.symbol(d.data.sidc,{size:15}).getMarker();
-			return "translate("+(-d.data.symbol.octagonAnchor.x)+","+(-d.data.symbol.octagonAnchor.y)+")";
-		})
-		.each(function(d) { this.appendChild(d.data.symbol.asDOM()) })      
+	//milsymbol icon
+	newNode.each(function (d) {
+		if (d.data.sidc) {
+			d3.select(this)
+			.append("g")
+	    	.attr("class", "symbol")
+			.attr("transform", function(d) {
+				if (d.data.sidc) d.data.symbol = new MS.symbol(d.data.sidc,{size:15}).getMarker();
+				return "translate("+(-d.data.symbol.octagonAnchor.x)+","+(-d.data.symbol.octagonAnchor.y)+")";
+			})
+			.each(function (d) {this.appendChild(d.data.symbol.asDOM())});
+		}
+	});     
 	
 	newNode.append("text")
 		.attr("class", "node-text")
 		.attr("dy", 3)
 		.attr("x", 20)
 		.style("text-anchor", "start")
-		.text(function(d) { return d.data.name; });
+		.text(function(d) { return d.data.name || d.data.orbatName; });
  
  
  //Remove old nodes

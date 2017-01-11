@@ -1,0 +1,40 @@
+<html>
+<style>
+body{
+	font-family: "Open Sans", Arial, sans-serif;
+	font-size: 0.9rem;
+	margin: 1rem 2rem 2rem;
+	color: #34495E;
+}
+
+</style>
+<script src="../dist/orbat.msdl.js"></script>
+<body onload="document.getElementById('files').addEventListener('change', loadFileAsText, false)">
+Military Scenario Definition Language file (MSDL): <input type="file" id="files" name="files[]"><br>
+<h3>Read msdl file and converts to JSON tree: <i>new Orbat.read(file)</i></h3>
+<textarea id="orbat_json" style="width: 700px; height: 300px;">
+</textarea><br>
+<!--
+<h3>Writes an sof file from a JSON tree:  <i>orbat.write()</i></h3>
+<textarea id="orbat_xml" style="width: 700px; height: 300px;">
+</textarea><br>
+-->   
+<script>
+function loadFileAsText (evt) {
+	var fileToLoad = evt.target.files[0];
+	var fileReader = new FileReader();
+	fileReader.onload = function(fileLoadedEvent) {
+		var file = fileLoadedEvent.target.result;
+		var orbat = new Orbat().read(file);
+		document.getElementById('orbat_json').value = JSON.stringify(orbat, null, 4);
+		//document.getElementById('orbat_xml').value = orbat.write();
+				
+	};
+	fileReader.readAsText(fileToLoad, "UTF-8");
+}
+</script>
+
+
+
+</body>
+</html>
