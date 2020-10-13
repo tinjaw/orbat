@@ -45,6 +45,13 @@ var Orbat = class {
 			name: 			"Name",
 			sidc:			"SymbolCode",
 			hostility:		"Hostility"}
+		version["http://schemas.systematic.dk/2011/products/orbat-definition-v4"] = {
+			organisation:	"Organisation",
+			suborgs: 		"SubOrganisations",
+			name: 			"Name",
+			sidc:			"SymbolCode",
+			hostility:		"Hostility"}
+		
 	
 		var xmlns = xml.firstChild.getAttribute("xmlns");
 		this.orbatName = xml.firstChild.getAttribute(version[xmlns].name);
